@@ -1,0 +1,42 @@
+name: 'AddIssuesToSprintBoard'
+description: 'Adds an issue to the sprint board'
+author: 'FelixMZ2018'
+inputs:
+  PROJECT_NUMBER:
+    description: 'The Number of the project'
+    required: true
+  PROJECT_AUTOMATION_TOKEN:
+    description: 'a github PAT that allows project related actions'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get Project ID
+      uses: actions/github-script@v6
+      env:
+        GITHUB_TOKEN: ${{ inputs.PROJECT_AUTOMATION_TOKEN }}
+      with:
+        script: |
+          const query=`query ($org: String!, $project_number: Int!) {
+            organization(login: $org) {
+              projectNext(number: $project_number) {
+                id
+                fields(first: 20) {
+                  nodes {
+                    id
+                    name
+                    settings
+                  }
+                }
+              }
+            }
+          }`
+          const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              project_number: parseInt(context.payload.inputs.PROJECT_NUMBER)
+          }
+          const result = await github.graphql(query, variables)
+          console.log(result)
+
