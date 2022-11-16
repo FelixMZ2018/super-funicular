@@ -30,9 +30,11 @@ runs:
               }
             }`;
           const variables = {
-            org: core.getInput('OWNER'),
-            project_number: parseInt('3'),
+            org: ${{ github.event.inputs.OWNER }},
+            project_number: parseInt(${{ github.event.inputs.OWNER }),
           }
 
+          console.log({variables})
+
           const result = await github.graphql(getBoardQuery, variables)
-          console.log(result)
+          console.log({result})
