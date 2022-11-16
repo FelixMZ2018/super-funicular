@@ -14,7 +14,27 @@ runs:
     - uses: actions/github-script@v6
       with:
         projectNumber: ${{inputs.PROJECT_NUMBER}}
+        owner: ${{inputs.PROJECT_NUMBER}}
         script: |
-          console.log({github, context})
-          console.log(core.getInput('projectNumber'))
+          const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
+              organization(login: $org) {
+                projectNext(number: $project_number) {
+                  id
+                  fields(first: 20) {
+                    nodes {
+                      id
+                      name
+                      settings
+                    }
+                  }
+                }
+              }
+            }`;
+          const variables = {
+            org: core.getInput('owner'),
+            project_number: parseInt(core.getInput('projectNumber')),
+          }
+          console.log({variables})
+          const result = await github.graphql(getBoardQuery, variables)
+          console.log({result})
 
