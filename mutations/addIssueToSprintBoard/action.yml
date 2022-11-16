@@ -31,7 +31,7 @@ runs:
             }`;
           const variables = {
             org: ${{ github.event.inputs.OWNER }},
-            project_number: parseInt(${{ github.event.inputs.OWNER }),
+            project_number: parseInt(${{ github.event.inputs.OWNER }}),
           }
 
           console.log({variables})
