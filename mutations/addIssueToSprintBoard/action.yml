@@ -13,9 +13,9 @@ runs:
   steps:
     - uses: actions/github-script@v6
       with:
+        projectNumber: ${{inputs.PROJECT_NUMBER}}
+        org: ${{inputs.OWNER}}
         script: |
-          console.log(process.env)
-          console.log(github)
           const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
               organization(login: $org) {
                 projectNext(number: $project_number) {
@@ -31,8 +31,8 @@ runs:
               }
             }`;
           const variables = {
-            org: context.inputs.OWNER,
-            project_number: context.inputs.PROJECT_NUMBER,
+            org: core.getInput('org')
+            project_number: core.getInput('projectNumber'),
           }
 
           const result = await github.graphql(getBoardQuery, variables)
