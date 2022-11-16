@@ -30,8 +30,8 @@ runs:
               }
             }`;
           const variables = {
-            org: inputs.org
-            project_number: core.getInput('project'),
+            org: core.getInput('OWNER'),
+            project_number: core.getInput('PROJECT_NUMBER'),
           }
 
           const result = await github.graphql(getBoardQuery, variables)
