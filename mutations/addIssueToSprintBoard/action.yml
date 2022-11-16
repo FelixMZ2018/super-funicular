@@ -31,7 +31,7 @@ runs:
             }`;
           const variables = {
             org: core.getInput('OWNER'),
-            project_number: core.getInput('PROJECT_NUMBER'),
+            project_number: parseInt(core.getInput('PROJECT_NUMBER')),
           }
 
           const result = await github.graphql(getBoardQuery, variables)
