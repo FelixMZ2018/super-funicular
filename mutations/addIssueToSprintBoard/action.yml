@@ -15,6 +15,8 @@ runs:
       with:
         script: |
           console.log(process.env)
+          console.log(inputs)
+          console.log(context)
           const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
               organization(login: $org) {
                 projectNext(number: $project_number) {
