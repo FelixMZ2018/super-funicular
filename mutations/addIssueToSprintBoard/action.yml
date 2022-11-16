@@ -6,7 +6,7 @@ inputs:
     description: 'Project Number'
   OWNER:
     description: the owner of the project
-  PROJECT_AUTOMATION_TOKEN:
+  GITHUB_TOKEN:
     description: the github token with the approriate access
 runs:
   using: "composite"
@@ -14,19 +14,24 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
-          const query = `query($owner:String!, $name:String!, $label:String!) {
-            repository(owner:$owner, name:$name){
-              issues(first:100, labels: [$label]) {
-                nodes {
+          const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
+              organization(login: $org) {
+                projectNext(number: $project_number) {
                   id
+                  fields(first: 20) {
+                    nodes {
+                      id
+                      name
+                      settings
+                    }
+                  }
                 }
               }
-            }
-          }`;
+            }`;
           const variables = {
-            owner: context.repo.owner,
-            name: context.repo.repo,
-            label: 'wontfix'
+            org: context.inputs.OWNER,
+            project_number: context.inputs.PROJECT_NUMBER,
           }
-          const result = await github.graphql(query, variables)
+
+          const result = await github.graphql(getBoardQuery, variables)
           console.log(result)
