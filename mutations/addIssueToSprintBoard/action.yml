@@ -15,26 +15,5 @@ runs:
       with:
         script: |
           console.log(core)
-          const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
-              organization(login: $org) {
-                projectNext(number: $project_number) {
-                  id
-                  fields(first: 20) {
-                    nodes {
-                      id
-                      name
-                      settings
-                    }
-                  }
-                }
-              }
-            }`;
-          const variables = {
-            org: ${{ github.event.inputs.OWNER }},
-            project_number: parseInt(${{ github.event.inputs.OWNER }}),
-          }
+          console.log(process.ENV)
 
-          console.log({variables})
-
-          const result = await github.graphql(getBoardQuery, variables)
-          console.log({result})
