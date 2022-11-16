@@ -16,4 +16,5 @@ runs:
         projectNumber: ${{inputs.PROJECT_NUMBER}}
         script: |
           console.log({github, context})
+          console.log(core.getInput('projectNumber'))
 
