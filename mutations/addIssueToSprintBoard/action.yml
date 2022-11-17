@@ -20,7 +20,6 @@ runs:
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           }
 
-          console.log(variables)
           const getBoardQuery = `query($owner: String!, $projectNumber: Int!) {
             user(login: $owner) {
               projectV2(number: $projectNumber) {
@@ -49,6 +48,6 @@ runs:
           }`
 
 
-          const result = await github.graphql(getBoardQuery)
+          const result = await github.graphql(getBoardQuery, variables)
           console.log({result})
 
