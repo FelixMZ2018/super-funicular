@@ -32,6 +32,8 @@ runs:
             }
           }`
 
+          const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : 0
+
           const getTriggerIdQuery = `query($repo: String!, !number: Int!) {
             repository(name: "friendly-couscous", owner: "FelixMZ2018") {
               issueOrPullRequest(number: 3) {
@@ -44,7 +46,13 @@ runs:
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
 
-          console.log({getBoardQueryResults})
+          const getTriggerIdQueryResult = await github.graphql(
+          getTriggerIdQuery, {
+            repo: context.repository.name
+            number: triggerNumber
+          })
+
+          console.log({getBoardQueryResults, getTriggerIdQueryResult})
 
           console.log({sprintBoard,iteration})
 
