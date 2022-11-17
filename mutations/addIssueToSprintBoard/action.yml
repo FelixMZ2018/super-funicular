@@ -51,6 +51,8 @@ runs:
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
 
+          console.log({getBoardQueryResults})
+
           const sprintBoard = getBoardQueryResults.data.user.projectV2.fields.nodes.find((node => node.name === getBoardQueryVariables.iterationFieldName))
           const iteration = sprintBoard.configuration.iterations[0]
 
