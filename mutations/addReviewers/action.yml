@@ -15,6 +15,7 @@ runs:
       with:
         github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
+          console.log('do things here')
 
 
 
