@@ -45,7 +45,7 @@ runs:
 
           const getTriggerIdQueryResult = await github.graphql(
           getTriggerIdQuery, {
-            name: context.repository.name,
+            name: context.repo.name,
             owner: '${{inputs.OWNER}}',
             number: triggerNumber
           })
