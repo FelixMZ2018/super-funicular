@@ -63,7 +63,7 @@ runs:
           await github.graphql(assignmentMutation,{
             projectId: boardId,
             contentId: ticketId,
-          }
+          })
 
           console.log({boardId, ticketId})
 
