@@ -16,7 +16,7 @@ runs:
       with:
         github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
-          const variables = {
+          const getBoardQueryVariables = {
             owner: '${{inputs.OWNER}}',
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           }
@@ -49,6 +49,10 @@ runs:
           }`
 
 
-          const result = await github.graphql(getBoardQuery, variables)
-          console.log({result})
+          const result = await github.graphql(getBoardQuery, getBoardQueryVariables)
+
+          const sprintBoard = boardQueryREsult.data.viewer.projectV2.fields.nodes.find((node => node.name === getBoardQueryVariables.iterationFieldName))
+          const iteration = sprintBoard.configuration.iterations[0]
+
+          console.log({sprintBoard,iteration})
 
