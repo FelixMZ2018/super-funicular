@@ -52,6 +52,3 @@ runs:
 
           console.log({getBoardQueryResults, getTriggerIdQueryResult})
 
-          console.log({sprintBoard,iteration})
-
-
