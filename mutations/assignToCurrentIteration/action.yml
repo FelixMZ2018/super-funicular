@@ -4,6 +4,8 @@ description: moves an issue to a sprintboard
 inputs:
   PROJECT_NUMBER:
     description: 'Project Number'
+  ITERATION_NAME:
+    description: the name of the iteration column
   OWNER:
     description: the owner of the project
   GITHUB_TOKEN:
@@ -14,40 +16,73 @@ runs:
   steps:
     - uses: actions/github-script@v6
       with:
-        projectNumber: ${{inputs.PROJECT_NUMBER}}
-        owner: ${{inputs.OWNER}}
+        github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
-          const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
-              viewer {
-                projectV2(number: project_number) {
-                      fields(last: 20) {
-                        nodes {
-                          ... on ProjectV2Field {
-                            id
-                            name
-                          }
-                          ... on ProjectV2IterationField {
-                            id
-                            name
-                          }
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            name
-                            options {
-                              name
-                              id
-                            }
-                          }
+          const getBoardQuery = `query($owner: String!, $projectNumber: Int!) {
+            user(login: $owner) {
+              projectV2(number: $projectNumber) {
+                id
+                items(last: 100, orderBy: {field: POSITION, direction: ASC}) {
+                  nodes {
+                    databaseId
+                    id
+                    content {
+                      ... on Issue {
+                        id
+                        number
+                      }
+                      ... on PullRequest {
+                        id
+                        number
+                      }
+                    }
+                  }
+                }
+                fields(first: 20) {
+                  nodes {
+                    ... on ProjectV2IterationField {
+                      id
+                      name
+                      dataType
+                      configuration {
+                        iterations {
+                          id
                         }
                       }
                     }
+                  }
+                }
               }
-            }`;
-          const variables = {
-            org: core.getInput('owner'),
-            project_number: parseInt(core.getInput('projectNumber')),
-          }
-          console.log({variables})
-          const result = await github.graphql(getBoardQuery, variables)
-          console.log({result})
+            }
+          }`
+
+          const board = await github.graphql(getBoardQuery, {
+            owner: '${{inputs.OWNER}}',
+            projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
+          })
+
+          const iterationFieldNode = data.user.projectV2.fields.nodes.find((node) => node.name === iterationFieldName && node.dataType === 'ITERATION')
+          const boardItem = data.user.projectV2.items.nodes.find(node => node.content.number === ticketNumber)
+
+
+          const projectId = data.user.projectV2.id
+          const itemId = boardItem.id
+          const fieldId = iterationFieldNode.id
+          const iterationId = iterationFieldNode.configuration.iterations[0].id
+
+
+          console.log({projectId,itemId,fieldId,iterationId})
+
+          const assignmentMutationQuery = `mutation($fieldId: ID!, $itemId: ID!, $projectId: ID!, $iterationId: String ID!) {
+            updateProjectV2ItemFieldValue(
+              input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: {iterationId: $iterationId}}
+            )
+          }`
+
+          await github.graphql(assignmentMutationQuery,{
+            fieldId,
+            itemId,
+            projectId,
+            iterationId,
+          })
 
