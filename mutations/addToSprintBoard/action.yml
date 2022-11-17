@@ -40,7 +40,7 @@ runs:
             }
           }`
 
-          console.log(${{ github.event.number }})
+          console.log(context.payload)
 
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
