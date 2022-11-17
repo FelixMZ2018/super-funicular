@@ -31,7 +31,7 @@ runs:
 
           const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : 0
 
-          const getTriggerIdQuery = `query($repo: String!,$owner: String! $number: Int!) {
+          const getTriggerIdQuery = `query($repo: String!,$owner: String!, $number: Int!) {
             repository(name: $repo, owner: $owner) {
               issueOrPullRequest(number: $number) {
                 ... on Issue { id }
