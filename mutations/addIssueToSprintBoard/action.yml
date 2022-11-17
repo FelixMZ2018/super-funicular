@@ -42,7 +42,7 @@ runs:
 
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
-
+          console.log(context.repo)
           const getTriggerIdQueryResult = await github.graphql(
           getTriggerIdQuery, {
             name: context.repo.name,
