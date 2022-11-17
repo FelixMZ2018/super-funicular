@@ -46,7 +46,7 @@ runs:
           console.log(context.eventName)
 
           switch (context.eventName) {
-            case 'issue':
+            case 'issues':
               await github.graphql(`mutation($assigneeIds: [ID!] = "", $id: ID = "") {
                 updateIssue(input: {id: "", assigneeIds: ""}) {
                     mutationId
