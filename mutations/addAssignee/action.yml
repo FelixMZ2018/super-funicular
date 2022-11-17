@@ -1,0 +1,61 @@
+name: move issue to sprint board
+description: moves an issue to a sprintboard
+
+inputs:
+  ASSIGNEE_NAME:
+    description: 'the username of the assignee'
+runs:
+
+  using: "composite"
+  steps:
+    - uses: actions/github-script@v6
+      with:
+        github-token: ${{ inputs.GITHUB_TOKEN }}
+        script: |
+          const user = await github.graphql(`query($user: String!) {
+            user(login: $user) {
+                id
+            }
+          }`, { user: '${{inputs.OWNER}}' } )
+
+          if (!user) {
+            core.setFailed('Could not find user')
+          }
+
+          const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : context.payload.pull_request.number
+
+          const { repository: { issueOrPullRequest : { id } } } = await github.graphql(
+            `query($repo: String!,$owner: String!, $number: Int!) {
+              repository(name: $repo, owner: $owner) {
+                issueOrPullRequest(number: $number) {
+                  ... on Issue { id }
+                  ... on PullRequest { id }
+                }
+              }
+            }`, {
+              repo: context.repo.repo,
+              owner: context.repo.owner,
+              number: triggerNumber
+            }
+          )
+
+          switch (context.eventName) {
+            case 'issue':
+              await github.graphql(`mutation($assigneeIds: [ID!] = "", $id: ID = "") {
+                updateIssue(input: {id: "", assigneeIds: ""}) {
+                    mutationId
+                }
+              }`, { id, assigneeIds: [user.id] } )
+
+            break;
+
+            case 'pull_request':
+              await github.graphql(`mutation($assigneeIds: [ID!] = "", $id: ID = "") {
+                updatePullRequest(input: {pullRequestId: "", assigneeIds: ""}) {
+                    mutationId
+                }
+              }`, { pullRequestId: id, assigneeIds: [user.id] } )
+            break;
+          }
+
+
