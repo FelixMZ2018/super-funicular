@@ -54,5 +54,16 @@ runs:
           const boardId = getBoardQueryResults.user.projectV2.id
           const ticketId = getTriggerIdQueryResult.repository.issueOrPullRequest.id
 
+          const assignmentMutation = `query($projectId: String!, $contentId: String!`) {
+            addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+              clientMutationId
+            }
+          }`
+
+          await github.graphql(assignmentMutation,{
+            projectId: boardId,
+            contentId: ticketId,
+          }
+
           console.log({boardId, ticketId})
 
