@@ -83,7 +83,9 @@ runs:
           const assignmentMutationQuery = `mutation($fieldId: ID!, $itemId: ID!, $projectId: ID!, $iterationId: ID!) {
             updateProjectV2ItemFieldValue(
               input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: {iterationId: $iterationId}}
-            ) {}
+            ) {
+            clientMutationId
+            }
           }`
 
           await github.graphql(assignmentMutationQuery,{
