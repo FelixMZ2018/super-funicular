@@ -16,7 +16,7 @@ runs:
       with:
         script: |
           const getBoardQuery = `query($owner: String!, $projectNumber: Int!) {
-            viewer {
+            user(login: $owner) {
               projectV2(number: $projectNumber) {
                 fields(last: 20) {
                   nodes {
