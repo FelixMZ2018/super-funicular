@@ -29,8 +29,6 @@ runs:
             }
           }`
 
-          const triggerNumber = ${{ github.event.number }}
-
           const getTriggerIdQuery = `query($repo: String!,$owner: String!, $number: Int!) {
             repository(name: $repo, owner: $owner) {
               issueOrPullRequest(number: $number) {
@@ -47,7 +45,7 @@ runs:
           getTriggerIdQuery, {
             repo: context.repo.repo,
             owner: context.repo.owner,
-            number: triggerNumber
+            number: ${{ github.event.number }}
           })
 
           console.log({getBoardQueryResults, getTriggerIdQueryResult})
