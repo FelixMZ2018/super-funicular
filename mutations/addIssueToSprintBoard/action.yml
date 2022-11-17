@@ -15,6 +15,12 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
+          const variables = {
+            owner: '${{inputs.OWNER}}',
+            projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
+          }
+
+          console.log(variables)
           const getBoardQuery = `query($owner: String!, $projectNumber: Int!) {
             user(login: $owner) {
               projectV2(number: $projectNumber) {
@@ -42,10 +48,7 @@ runs:
             }
           }`
 
-          const variables = {
-            owner: '${{inputs.OWNER}}',
-            projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
-          }
+
           const result = await github.graphql(getBoardQuery)
           console.log({result})
 
