@@ -45,7 +45,7 @@ runs:
           console.log(context.repo)
           const getTriggerIdQueryResult = await github.graphql(
           getTriggerIdQuery, {
-            name: context.repo.name,
+            name: context.repo.repo,
             owner: context.repo.owner,
             number: triggerNumber
           })
