@@ -15,10 +15,10 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
-          const getBoardQuery = `query($owner: !String, $projectNumber: !Int)
+          const getBoardQuery = `query($owner: String!, $projectNumber: Int!)
               {
                 viewer {
-                  projectV2(number: projectNumber {
+                  projectV2(number: $projectNumber {
                         fields(last: 20) {
                           nodes {
                             ... on ProjectV2Field {
@@ -45,7 +45,7 @@ runs:
 
           const variables = {
             owner: '${{inputs.OWNER}}',
-            projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}'),
+            projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           }
           const result = await github.graphql(getBoardQuery)
           console.log({result})
