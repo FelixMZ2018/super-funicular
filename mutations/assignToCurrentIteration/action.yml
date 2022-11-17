@@ -4,7 +4,7 @@ description: moves an issue to a sprintboard
 inputs:
   PROJECT_NUMBER:
     description: 'Project Number'
-  ITERATION_NAME:
+  ITERATION_FIELD_NAME:
     description: the name of the iteration column
   OWNER:
     description: the owner of the project
@@ -61,7 +61,7 @@ runs:
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           })
 
-          const iterationFieldNode = board.user.projectV2.fields.nodes.find((node) => node.name === iterationFieldName && node.dataType === 'ITERATION')
+          const iterationFieldNode = board.user.projectV2.fields.nodes.find((node) => node.name === '${{inputs.ITERATION_FIELD_NAME}}' && node.dataType === 'ITERATION')
           const boardItem = board.user.projectV2.items.nodes.find(node => node.content.number === ticketNumber)
 
           if(iterationFieldNode.configuration.iterations.length === 0) {
