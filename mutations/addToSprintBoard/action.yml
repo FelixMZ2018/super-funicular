@@ -29,7 +29,7 @@ runs:
             }
           }`
 
-          const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : 0
+          const triggerNumber = ${{ github.event.number }}
 
           const getTriggerIdQuery = `query($repo: String!,$owner: String!, $number: Int!) {
             repository(name: $repo, owner: $owner) {
