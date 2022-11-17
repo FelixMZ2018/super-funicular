@@ -29,7 +29,7 @@ runs:
             }
           }`
 
-          const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : 0
+          const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : context.payload.pull_request.number
 
           const getTriggerIdQuery = `query($repo: String!,$owner: String!, $number: Int!) {
             repository(name: $repo, owner: $owner) {
@@ -40,17 +40,19 @@ runs:
             }
           }`
 
-          console.log(context.payload)
-
-
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
 
           const getTriggerIdQueryResult = await github.graphql(
-          getTriggerIdQuery, {
-            repo: context.repo.repo,
-            owner: context.repo.owner,
-            number: triggerNumber
-          })
+            getTriggerIdQuery, {
+              repo: context.repo.repo,
+              owner: context.repo.owner,
+              number: triggerNumber
+            })
 
           console.log({getBoardQueryResults, getTriggerIdQueryResult})
+
+          const boardId = getBoardQueryResults.user.projectV2.id
+          const ticketId = getTriggerIdQueryResult.repository.issueOrPullRequest.id
+
+          console.log({boardId, ticketId})
 
