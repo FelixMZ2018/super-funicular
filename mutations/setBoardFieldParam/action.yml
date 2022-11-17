@@ -1,4 +1,4 @@
-name: move issue to sprint board
+name: set board field
 description: moves an issue to a sprintboard
 
 inputs:
@@ -6,6 +6,10 @@ inputs:
     description: 'Project Number'
   OWNER:
     description: the owner of the project
+  FIELD_NAME:
+    description: the target field name
+  FIELD_VALUE:
+    description: the target field value
   GITHUB_TOKEN:
     description: the github token with the approriate access
 runs:
@@ -17,7 +21,6 @@ runs:
         projectNumber: ${{inputs.PROJECT_NUMBER}}
         owner: ${{inputs.OWNER}}
         script: |
-          console.log(context.issue)
           const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
               viewer {
                 projectV2(number: project_number) {
