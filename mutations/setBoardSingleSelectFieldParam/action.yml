@@ -76,7 +76,7 @@ runs:
 
           const assignmentMutationQuery = `mutation($fieldId: ID!, $itemId: ID!, $projectId: ID!, $singleSelectOptionId: String!) {
             updateProjectV2ItemFieldValue(
-              input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, singleSelectOptionId: {value: $singleSelectOptionId}}
+              input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: {singleSelectOptionId: $singleSelectOptionId}}
             ) {
             clientMutationId
             }
