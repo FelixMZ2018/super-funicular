@@ -15,37 +15,35 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
-          const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
-              viewer {
-                projectV2(number: project_number) {
-                      fields(last: 20) {
-                        nodes {
-                          ... on ProjectV2Field {
-                            id
-                            name
-                          }
-                          ... on ProjectV2IterationField {
-                            id
-                            name
-                          }
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            name
-                            options {
-                              name
+          const getBoardQuery = `query getBoard(
+            org: ${{inputs.OWNER}}',
+            project_number: parseInt('${{inputs.PROJECT_NUMBER}}'))
+              {
+                viewer {
+                  projectV2(number: project_number) {
+                        fields(last: 20) {
+                          nodes {
+                            ... on ProjectV2Field {
                               id
+                              name
+                            }
+                            ... on ProjectV2IterationField {
+                              id
+                              name
+                            }
+                            ... on ProjectV2SingleSelectField {
+                              id
+                              name
+                              options {
+                                name
+                                id
+                              }
                             }
                           }
                         }
                       }
-                    }
-              }
+                }
             }`;
-          const variables = {
-            org: '${{inputs.OWNER}}',
-            project_number: parseInt(${{inputs.PROJECT_NUMBER}}),
-          }
-          console.log({variables})
-          const result = await github.graphql(getBoardQuery, variables)
+          const result = await github.graphql(getBoardQuery)
           console.log({result})
 
