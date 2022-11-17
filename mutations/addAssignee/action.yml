@@ -4,6 +4,9 @@ description: moves an issue to a sprintboard
 inputs:
   ASSIGNEE_NAME:
     description: 'the username of the assignee'
+  GITHUB_TOKEN:
+    description: the github token with the approriate access
+
 runs:
 
   using: "composite"
