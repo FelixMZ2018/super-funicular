@@ -16,7 +16,6 @@ runs:
       with:
         github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
-          console.log(context)
           const getBoardQueryVariables = {
             owner: '${{inputs.OWNER}}',
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
@@ -26,17 +25,32 @@ runs:
             user(login: $owner) {
               projectV2(number: $projectNumber) {
                 id
-                fields(last: 20) {
-                }
               }
             }
           }`
 
           const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : 0
 
+          const getTriggerIdQuery = `query($repo: String!, $number: Int!) {
+            repository(name: $repo, owner: $owner) {
+              issueOrPullRequest(number: $number) {
+                ... on Issue { id }
+                ... on PullRequest { id }
+              }
+            }
+          }`
+
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
 
+          const getTriggerIdQueryResult = await github.graphql(
+          getTriggerIdQuery, {
+            repo: context.repository.name,
+            owner: '${{inputs.OWNER}}',
+            number: triggerNumber
+          })
+
+          console.log({getBoardQueryResults, getTriggerIdQueryResult})
 
           console.log({sprintBoard,iteration})
 
