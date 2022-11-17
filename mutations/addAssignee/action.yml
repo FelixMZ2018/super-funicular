@@ -19,7 +19,7 @@ runs:
             user(login: $user) {
                 id
             }
-          }`, { user: '${{inputs.OWNER}}' } )
+          }`, { user: '${{inputs.ASSIGNEE_NAME}}' } )
 
           if (!user) {
             core.setFailed('Could not find user')
