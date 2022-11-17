@@ -74,9 +74,6 @@ runs:
           const fieldId = selectField.id
           const singleSelectOptionId = singleSelectOption.id
 
-
-          console.log({projectId,itemId,fieldId,iterationId})
-
           const assignmentMutationQuery = `mutation($fieldId: ID!, $itemId: ID!, $projectId: ID!, $singleSelectOptionId: String!) {
             updateProjectV2ItemFieldValue(
               input: {projectId: $projectId, itemId: $itemId, fieldId: $fieldId, singleSelectOptionId: {value: $singleSelectOptionId}}
