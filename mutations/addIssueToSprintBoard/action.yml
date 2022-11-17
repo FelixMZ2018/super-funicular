@@ -49,7 +49,7 @@ runs:
           }`
 
 
-          const result = await github.graphql(getBoardQuery, getBoardQueryVariables)
+          const getBoardQueryVariables = await github.graphql(getBoardQuery, getBoardQueryVariables)
 
           const sprintBoard = boardQueryREsult.data.viewer.projectV2.fields.nodes.find((node => node.name === getBoardQueryVariables.iterationFieldName))
           const iteration = sprintBoard.configuration.iterations[0]
