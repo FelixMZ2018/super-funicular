@@ -15,12 +15,10 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
-          const getBoardQuery = `query getBoard(
-            org: '${{inputs.OWNER}}',
-            project_number: parseInt('${{inputs.PROJECT_NUMBER}}'))
+          const getBoardQuery = `query getBoard
               {
                 viewer {
-                  projectV2(number: project_number) {
+                  projectV2(number: parseInt('${{inputs.PROJECT_NUMBER}}') {
                         fields(last: 20) {
                           nodes {
                             ... on ProjectV2Field {
