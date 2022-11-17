@@ -32,14 +32,14 @@ runs:
             }
           }`
 
-          const getTriggerIdQuery = query($repo: String!, !number: Int!) {
+          const getTriggerIdQuery = `query($repo: String!, !number: Int!) {
             repository(name: "friendly-couscous", owner: "FelixMZ2018") {
               issueOrPullRequest(number: 3) {
                 ... on Issue { id }
                 ... on PullRequest { id }
               }
             }
-          }
+          }`
 
 
           const getBoardQueryResults = await github.graphql(getBoardQuery, getBoardQueryVariables)
