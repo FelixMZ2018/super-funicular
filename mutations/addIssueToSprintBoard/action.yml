@@ -39,7 +39,8 @@ runs:
                   }
                 }
               }
-            }`
+            }
+          }`
 
           const variables = {
             owner: '${{inputs.OWNER}}',
