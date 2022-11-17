@@ -45,14 +45,18 @@ runs:
           switch (context.eventName) {
             case 'issues':
               await github.graphql(`mutation($assigneeIds: [ID!] = "", $id: ID = "") {
-                updateIssue(input: {id: $id, assigneeIds: $assigneeIds}) {}
+                updateIssue(input: {id: $id, assigneeIds: $assigneeIds}) {
+                    clientMutationId
+                }
               }`, { id, assigneeIds: [user.id] } )
 
             break;
 
             case 'pull_request':
               await github.graphql(`mutation($assigneeIds: [ID!] = "", $id: ID = "") {
-                updatePullRequest(input: {pullRequestId: $id, assigneeIds: $assigneeIds}) {}
+                updatePullRequest(input: {pullRequestId: $id, assigneeIds: $assigneeIds}) {
+                    clientMutationId
+                }
               }`, { pullRequestId: id, assigneeIds: [user.id] } )
             break;
           }
