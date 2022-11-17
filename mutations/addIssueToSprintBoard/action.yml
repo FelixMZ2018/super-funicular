@@ -15,7 +15,7 @@ runs:
     - uses: actions/github-script@v6
       with:
         script: |
-          const getBoardQuery = `query getBoard
+          const getBoardQuery = `query getBoard()
               {
                 viewer {
                   projectV2(number: parseInt('${{inputs.PROJECT_NUMBER}}') {
