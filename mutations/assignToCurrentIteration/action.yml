@@ -56,7 +56,7 @@ runs:
             }
           }`
 
-          const board = await github.graphql(getBoardQuery, {
+          const queryResult = await github.graphql(getBoardQuery, {
             owner: '${{inputs.OWNER}}',
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           })
@@ -64,15 +64,15 @@ runs:
           const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : context.payload.pull_request.number
 
 
-          const iterationFieldNode = board.user.projectV2.fields.nodes.find((node) => node.name === '${{inputs.ITERATION_FIELD_NAME}}' && node.dataType === 'ITERATION')
-          const boardItem = board.user.projectV2.items.nodes.find(node => node.content.number === triggerNumber)
+          const iterationFieldNode = queryResult.user.projectV2.fields.nodes.find((node) => node.name === '${{inputs.ITERATION_FIELD_NAME}}' && node.dataType === 'ITERATION')
+          const boardItem = queryResult.user.projectV2.items.nodes.find(node => node.content.number === triggerNumber)
 
           if(iterationFieldNode.configuration.iterations.length === 0) {
             core.setFailed('No current Iteration')
           }
 
 
-          const projectId = data.user.projectV2.id
+          const projectId = queryResult.user.projectV2.id
           const itemId = boardItem.id
           const fieldId = iterationFieldNode.id
           const iterationId = iterationFieldNode.configuration.iterations[0].id
