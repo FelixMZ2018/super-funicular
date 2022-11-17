@@ -14,8 +14,6 @@ runs:
   steps:
     - uses: actions/github-script@v6
       with:
-        projectNumber: ${{inputs.PROJECT_NUMBER}}
-        owner: ${{inputs.OWNER}}
         script: |
           console.log(context.issue)
           const getBoardQuery = `query getBoard($org: String!, $project_number: Int!) {
