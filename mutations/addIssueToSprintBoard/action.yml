@@ -16,7 +16,7 @@ runs:
       with:
         script: |
           const getBoardQuery = `query getBoard(
-            org: ${{inputs.OWNER}}',
+            org: '${{inputs.OWNER}}',
             project_number: parseInt('${{inputs.PROJECT_NUMBER}}'))
               {
                 viewer {
