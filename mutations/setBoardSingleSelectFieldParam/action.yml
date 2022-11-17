@@ -43,12 +43,13 @@ runs:
                 fields(first: 20) {
                   nodes {
                     ... on ProjectV2SingleSelectField {
-                    id
-                    name
-                    dataType
-                    options {
-                      name
                       id
+                      name
+                      dataType
+                      options {
+                        name
+                        id
+                      }
                     }
                   }
                 }
