@@ -25,6 +25,8 @@ runs:
             core.setFailed('Could not find user')
           }
 
+          console.log(user)
+
           const triggerNumber = context.eventName === 'issues' ? context.payload.issue.number : context.payload.pull_request.number
 
           const { repository: { issueOrPullRequest : { id } } } = await github.graphql(
