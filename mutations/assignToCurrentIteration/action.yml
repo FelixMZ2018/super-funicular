@@ -61,8 +61,8 @@ runs:
             projectNumber: parseInt('${{inputs.PROJECT_NUMBER}}')
           })
 
-          const iterationFieldNode = data.user.projectV2.fields.nodes.find((node) => node.name === iterationFieldName && node.dataType === 'ITERATION')
-          const boardItem = data.user.projectV2.items.nodes.find(node => node.content.number === ticketNumber)
+          const iterationFieldNode = board.user.projectV2.fields.nodes.find((node) => node.name === iterationFieldName && node.dataType === 'ITERATION')
+          const boardItem = board.user.projectV2.items.nodes.find(node => node.content.number === ticketNumber)
 
           if(iterationFieldNode.configuration.iterations.length === 0) {
             core.setFailed('No current Iteration')
